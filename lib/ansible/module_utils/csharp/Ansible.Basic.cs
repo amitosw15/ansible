@@ -606,7 +606,11 @@ namespace Ansible.Basic
 
             // do not validate, expand the env vars if it starts with \\?\ as
             // it is a special path designed for the NT kernel to interpret
-            if (stringValue.StartsWith(@"\\?\"))
+	    // Handle registry paths
+	    if (stringValue.StartsWith("HKCU:\\") || stringValue.StartsWith("HKLM:\\"))
+		return stringValue;
+            
+	    if (stringValue.StartsWith(@"\\?\"))
                 return stringValue;
 
             stringValue = Environment.ExpandEnvironmentVariables(stringValue);
